@@ -8,7 +8,7 @@ CEND = '\33[0m'
 
 
 def get_secret_word():
-    with open('data/words.txt', encoding='utf-8') as words:
+    with open('data/words_5.txt', encoding='utf-8') as words:
         return choice(words.readlines()).strip()
 
 
