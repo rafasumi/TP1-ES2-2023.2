@@ -81,8 +81,8 @@ def show_title_and_rules():
 def check_play_or_exit(first_game=False):
     if not first_game:
         print(FBWHITE + "\nWhat do you want to do now?" + CEND)
-    print(FBWHITE + "1)" + CEND + FBGREEN + " PLAY" + CEND)
-    print(FBWHITE + "2)" + CEND + FBRED + " EXIT" + CEND + "\n")
+    print(FBWHITE + "1)" + CEND + FBGREEN + " Play" + CEND)
+    print(FBWHITE + "2)" + CEND + FBRED + " Exit" + CEND + "\n")
     print('Select: ', end='')
     decision = int(input().strip())
     if decision == 2:
@@ -128,7 +128,7 @@ def is_valid_guess(word, word_size):
     english_dictionary = Dict('en_US')
 
     if len(word) != word_size:
-        print('Your guess must have 5 characters!')
+        print(f'Your guess must have {word_size} characters!')
         return False
     elif not word.isalpha():
         print('Your guess must contain only alphabet letters!')
