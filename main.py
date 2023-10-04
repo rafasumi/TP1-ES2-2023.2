@@ -1,10 +1,24 @@
 from random import choice
+from sys import stdout
+from time import sleep
 from enchant import Dict
 
 CCORRECT = '\33[1;30;42m'
 CPARTIAL = '\33[1;30;103m'
 CWRONG = '\33[1;30;47m'
 CEND = '\33[0m'
+
+
+def get_count_dict(str):
+    count_dict = dict()
+
+    for char in str:
+        if char in count_dict:
+            count_dict[char] += 1
+        else:
+            count_dict[char] = 1
+
+    return count_dict
 
 
 def get_secret_word():
@@ -28,19 +42,28 @@ def is_valid_guess(word, word_size):
     return True
 
 
+def print_guesses(guesses, tries):
+    for (index, guess) in enumerate(guesses):
+        for letter in guess:
+            if index == tries - 1:
+                sleep(0.2)
+            print(letter, end='')
+            stdout.flush()
+        print()
+        sleep(0.1)
+
+
 def play(max_tries=6, word_size=5):
     secret_word = get_secret_word()
 
-    base_string = f'{CWRONG}_{CEND}' * word_size
-    guesses = [base_string] * max_tries
+    base_string = f'{CWRONG}_{CEND}'
+    guesses = [[base_string]*word_size for _ in range(max_tries)]
 
     tries = 0
-
-    print(secret_word)
+    victory = False
 
     while tries < max_tries:
-        for guess in guesses:
-            print(guess)
+        print_guesses(guesses, tries)
 
         while True:
             print('Type your guess: ', end='')
@@ -49,25 +72,40 @@ def play(max_tries=6, word_size=5):
             if is_valid_guess(guessed_word, word_size):
                 break
 
-        styled_guess = ''
+        print()
+
+        uncolored_indexes = list()
+        count_dict = get_count_dict(secret_word)
         for (index, char) in enumerate(guessed_word):
             if char == secret_word[index]:
-                styled_guess += CCORRECT
-            elif char in secret_word:
-                styled_guess += CPARTIAL
+                guesses[tries][index] = CCORRECT + char + CEND
+                count_dict[char] -= 1
             else:
-                styled_guess += CWRONG
+                uncolored_indexes.append(index)
 
-            styled_guess += char + CEND
+        for index in uncolored_indexes:
+            char = guessed_word[index]
+            if char in count_dict and count_dict.get(char) > 0:
+                guesses[tries][index] = CPARTIAL + char + CEND
+                count_dict[char] -= 1
+            else:
+                guesses[tries][index] = CWRONG + char + CEND
 
-        guesses[tries] = styled_guess
         tries += 1
 
         if guessed_word == secret_word:
+            victory = True
             break
 
-    for guess in guesses:
-        print(guess)
+    print_guesses(guesses, tries)
+    print()
+
+    if victory:
+        print('Congratulations! You won!!')
+    else:
+        print('What a bummer :(')
+        print(f'The word was "{secret_word}". Try again!')
+
 
 
 def main():
