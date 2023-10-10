@@ -2,6 +2,7 @@ from random import choice
 from sys import stdout
 from time import sleep
 from enchant import Dict
+from PyDictionary import PyDictionary
 
 CEND = '\33[0m'
 # Background colors
@@ -32,6 +33,8 @@ FBWHITE = '\33[1;30;97m'
 
 CLASSIC = 1
 THEMED = 2
+DAILYWORDLE = 3
+DAILYPYDLE = 4
 EASY = 1
 INTERMEDIATE = 2
 HARD = 3
@@ -92,7 +95,9 @@ def check_play_or_exit(first_game=False):
 def check_game_mode():
     print(FBWHITE + "\nChoose your game mode:" + CEND)
     print(FBWHITE + "1)" + CEND + FBCYAN + " Classic" + CEND)
-    print(FBWHITE + "2)" + CEND + FBMAGENTA + " Themed" + CEND + "\n")
+    print(FBWHITE + "2)" + CEND + FBMAGENTA + " Themed" + CEND)
+    print(FBWHITE + "3)" + CEND + FBYELLOW + " Daily Wordle" + CEND)
+    print(FBWHITE + "4)" + CEND + FBBLUE + " Daily Pydle" + CEND + "\n")
     print('Select: ', end='')
     classic_or_themed = int(input().strip())
     return classic_or_themed
@@ -117,6 +122,16 @@ def get_count_dict(str):
             count_dict[char] = 1
 
     return count_dict
+
+def get_meaning_of_word(secret_word):
+    dic = PyDictionary()
+    meanings = dic.meaning(secret_word)
+    print(FBWHITE + "\nMeanings: " + CEND)
+    meanings_list = list(meanings.values())
+    flat_meanings_list = [item for sublist in meanings_list for item in sublist]
+    print(" - " + flat_meanings_list[0])
+    print(" - " + flat_meanings_list[1])
+    print(" - " + flat_meanings_list[2])
 
 
 def get_secret_word(file_name):
@@ -205,6 +220,7 @@ def play(word_size=5, file_name = 'data/words_5.txt'):
         print('What a bummer :(')
         print(f'The word was "{secret_word}". Try again!')
 
+    get_meaning_of_word(secret_word)
 
 
 def main():
@@ -231,12 +247,22 @@ def main():
                 play(word_size, file_name)
                 first_game = False
             else:
+                # Tratamento de erro
                 pass
-            #tratamento de erro
         elif game_mode == THEMED:
-            #listar temas
+            # Listar temas e lançar jogo
+            first_game = False
+            pass
+        elif game_mode == DAILYWORDLE:
+            # Daily Wordle
+            first_game = False
+            pass
+        elif game_mode == DAILYPYDLE:
+            # Daily Pydle
+            first_game = False
             pass
         else:
+            # Tratamento de erro
             pass
 
 if __name__ == '__main__':
