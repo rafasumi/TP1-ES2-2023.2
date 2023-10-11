@@ -39,9 +39,9 @@ EASY = 1
 INTERMEDIATE = 2
 HARD = 3
 
+
 def show_title_and_rules():
-    
-    welcome_text = "Welcome to..."
+    welcome_text = 'Welcome to...'
     title = " .----------------.  .----------------.  .----------------.  .----------------.  .----------------.\n\
 | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\n\
 | |   ______     | || |  ____  ____  | || |  ________    | || |   _____      | || |  _________   | |\n\
@@ -58,8 +58,8 @@ def show_title_and_rules():
     print(FBWHITE + welcome_text + CEND)
     print()
 
-    colored_title = ""
-    for (index,char) in enumerate(title):
+    colored_title = ''
+    for (index, char) in enumerate(title):
         if index % 100 < 20:
             colored_title += FBGREEN + char + CEND
         elif index % 100 >= 20 and index % 100 < 40:
@@ -73,44 +73,48 @@ def show_title_and_rules():
 
     print(colored_title)
 
-    print(FBWHITE + "\nHow to play..." + CEND)
-    rules = "1. Letters that are in the answer and in the right place turn " + BGREEN + "green" + CEND + ".\n\
-2. Letters that are in the answer but in the wrong place turn " + BYELLOW + "yellow" + CEND + ".\n\
-3. Letters that are not in the answer turn " + BWHITE + "gray" + CEND + ".\n\
+    print(FBWHITE + '\nHow to play...' + CEND)
+    rules = "1. Letters that are in the answer and in the right place turn ' + BGREEN + 'green' + CEND + '.\n\
+2. Letters that are in the answer but in the wrong place turn ' + BYELLOW + 'yellow' + CEND + '.\n\
+3. Letters that are not in the answer turn ' + BWHITE + 'gray' + CEND + '.\n\
 4. Letters can appear more than once. So if your guess includes two of one letter, they may both turn yellow, both turn green, or one could be yellow and the other green.\n\
 5. Each guess must be a valid word in the English dictionary. You can't guess ABCDE, for instance.\n"
     print(rules)
 
+
 def check_play_or_exit(first_game=False):
     if not first_game:
-        print(FBWHITE + "\nWhat do you want to do now?" + CEND)
-    print(FBWHITE + "1)" + CEND + FBGREEN + " Play" + CEND)
-    print(FBWHITE + "2)" + CEND + FBRED + " Exit" + CEND + "\n")
+        print(FBWHITE + '\nWhat do you want to do now?' + CEND)
+    print(FBWHITE + '1)' + CEND + FBGREEN + ' Play' + CEND)
+    print(FBWHITE + '2)' + CEND + FBRED + ' Exit' + CEND + '\n')
     print('Select: ', end='')
     decision = int(input().strip())
     if decision == 2:
         decision = 0
     return decision
 
+
 def check_game_mode():
-    print(FBWHITE + "\nChoose your game mode:" + CEND)
-    print(FBWHITE + "1)" + CEND + FBCYAN + " Classic" + CEND)
-    print(FBWHITE + "2)" + CEND + FBMAGENTA + " Themed" + CEND)
-    print(FBWHITE + "3)" + CEND + FBYELLOW + " Daily Wordle" + CEND)
-    print(FBWHITE + "4)" + CEND + FBBLUE + " Daily Pydle" + CEND + "\n")
+    print(FBWHITE + '\nChoose your game mode:' + CEND)
+    print(FBWHITE + '1)' + CEND + FBCYAN + ' Classic' + CEND)
+    print(FBWHITE + '2)' + CEND + FBMAGENTA + ' Themed' + CEND)
+    print(FBWHITE + '3)' + CEND + FBYELLOW + ' Daily Wordle' + CEND)
+    print(FBWHITE + '4)' + CEND + FBBLUE + ' Daily Pydle' + CEND + '\n')
     print('Select: ', end='')
     classic_or_themed = int(input().strip())
     return classic_or_themed
 
+
 def check_difficulty():
-    print(FBWHITE + "\nChoose difficulty:" + CEND)
-    print(FBWHITE + "1)" + CEND + FBGREEN + " Easy" + CEND)
-    print(FBWHITE + "2)" + CEND + FBYELLOW + " Intermediate" + CEND)
-    print(FBWHITE + "3)" + CEND + FBRED + " Hard" + CEND + "\n")
+    print(FBWHITE + '\nChoose difficulty:' + CEND)
+    print(FBWHITE + '1)' + CEND + FBGREEN + ' Easy' + CEND)
+    print(FBWHITE + '2)' + CEND + FBYELLOW + ' Intermediate' + CEND)
+    print(FBWHITE + '3)' + CEND + FBRED + ' Hard' + CEND + '\n')
     print('Select: ', end='')
     difficulty = int(input().strip())
     print()
     return difficulty
+
 
 def get_count_dict(str):
     count_dict = dict()
@@ -123,15 +127,17 @@ def get_count_dict(str):
 
     return count_dict
 
+
 def get_meaning_of_word(secret_word):
+    print(FBWHITE + f'\nMeanings of {secret_word}' + CEND)
+
     dic = PyDictionary()
     meanings = dic.meaning(secret_word)
-    print(FBWHITE + "\nMeanings: " + CEND)
-    meanings_list = list(meanings.values())
-    flat_meanings_list = [item for sublist in meanings_list for item in sublist]
-    print(" - " + flat_meanings_list[0])
-    print(" - " + flat_meanings_list[1])
-    print(" - " + flat_meanings_list[2])
+    flat_meanings_list = [item for sublist in meanings.values() for item in sublist]
+    num_meanings = min(3, len(flat_meanings_list))
+
+    for i in range(num_meanings):
+        print(' - ' + flat_meanings_list[i])
 
 
 def get_secret_word(file_name):
@@ -166,7 +172,7 @@ def print_guesses(guesses, tries):
         sleep(0.1)
 
 
-def play(word_size=5, file_name = 'data/words_5.txt'):
+def play(word_size=5, file_name='data/words_5.txt'):
     max_tries = word_size + 1
     secret_word = get_secret_word(file_name)
 
@@ -224,7 +230,6 @@ def play(word_size=5, file_name = 'data/words_5.txt'):
 
 
 def main():
-
     show_title_and_rules()
     first_game = True
     while check_play_or_exit(first_game):
@@ -264,6 +269,7 @@ def main():
         else:
             # Tratamento de erro
             pass
+
 
 if __name__ == '__main__':
     main()
