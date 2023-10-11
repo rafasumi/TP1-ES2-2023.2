@@ -31,6 +31,7 @@ FBMAGENTA = '\33[1;30;95m'
 FBCYAN = '\33[1;30;96m'
 FBWHITE = '\33[1;30;97m'
 
+EXIT = 2
 CLASSIC = 1
 THEMED = 2
 DAILYWORDLE = 3
@@ -82,15 +83,30 @@ def show_title_and_rules():
     print(rules)
 
 
-def check_play_or_exit(first_game=False):
-    if not first_game:
-        print(FBWHITE + '\nWhat do you want to do now?' + CEND)
+def get_numeric_option(start, end):
+    while True:
+        print('Select: ', end='')
+        option = input().strip()
+        if not option.isnumeric():
+            print('You must give a number!')
+            continue
+
+        option = int(option)
+
+        if start <= option <= end:
+            break
+        else:
+            print('Invalid option!')
+
+    return option
+
+
+def check_play_or_exit():
     print(FBWHITE + '1)' + CEND + FBGREEN + ' Play' + CEND)
     print(FBWHITE + '2)' + CEND + FBRED + ' Exit' + CEND + '\n')
-    print('Select: ', end='')
-    decision = int(input().strip())
-    if decision == 2:
-        decision = 0
+
+    decision = get_numeric_option(1, 2)
+
     return decision
 
 
@@ -100,9 +116,10 @@ def check_game_mode():
     print(FBWHITE + '2)' + CEND + FBMAGENTA + ' Themed' + CEND)
     print(FBWHITE + '3)' + CEND + FBYELLOW + ' Daily Wordle' + CEND)
     print(FBWHITE + '4)' + CEND + FBBLUE + ' Daily Pydle' + CEND + '\n')
-    print('Select: ', end='')
-    classic_or_themed = int(input().strip())
-    return classic_or_themed
+
+    game_mode = get_numeric_option(1, 4)
+
+    return game_mode
 
 
 def check_difficulty():
@@ -110,9 +127,11 @@ def check_difficulty():
     print(FBWHITE + '1)' + CEND + FBGREEN + ' Easy' + CEND)
     print(FBWHITE + '2)' + CEND + FBYELLOW + ' Intermediate' + CEND)
     print(FBWHITE + '3)' + CEND + FBRED + ' Hard' + CEND + '\n')
-    print('Select: ', end='')
-    difficulty = int(input().strip())
+
+    difficulty = get_numeric_option(1, 3)
+
     print()
+
     return difficulty
 
 
@@ -133,11 +152,14 @@ def get_meaning_of_word(secret_word):
 
     dic = PyDictionary()
     meanings = dic.meaning(secret_word)
-    flat_meanings_list = [item for sublist in meanings.values() for item in sublist]
+    flat_meanings_list = [item for sublist in meanings.values()
+                          for item in sublist]
     num_meanings = min(3, len(flat_meanings_list))
 
     for i in range(num_meanings):
         print(' - ' + flat_meanings_list[i])
+
+    print()
 
 
 def get_secret_word(file_name):
@@ -231,8 +253,8 @@ def play(word_size=5, file_name='data/words_5.txt'):
 
 def main():
     show_title_and_rules()
-    first_game = True
-    while check_play_or_exit(first_game):
+    print(FBWHITE + '\nWhat do you want to do now?' + CEND)
+    while check_play_or_exit() != EXIT:
         game_mode = check_game_mode()
         if game_mode == CLASSIC:
             difficulty = check_difficulty()
@@ -240,34 +262,25 @@ def main():
                 word_size = 5
                 file_name = 'data/words_5.txt'
                 play()
-                first_game = False
             elif difficulty == INTERMEDIATE:
                 word_size = 6
                 file_name = 'data/words_6.txt'
                 play(word_size, file_name)
-                first_game = False
             elif difficulty == HARD:
                 word_size = 7
                 file_name = 'data/words_7.txt'
                 play(word_size, file_name)
-                first_game = False
             else:
                 # Tratamento de erro
                 pass
         elif game_mode == THEMED:
             # Listar temas e lançar jogo
-            first_game = False
             pass
         elif game_mode == DAILYWORDLE:
             # Daily Wordle
-            first_game = False
             pass
         elif game_mode == DAILYPYDLE:
             # Daily Pydle
-            first_game = False
-            pass
-        else:
-            # Tratamento de erro
             pass
 
 
