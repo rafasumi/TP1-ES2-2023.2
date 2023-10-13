@@ -1,3 +1,4 @@
+from datetime import date
 from random import choice
 from sys import stdout
 from time import sleep
@@ -33,9 +34,8 @@ FBWHITE = '\33[1;30;97m'
 
 EXIT = 2
 CLASSIC = 1
-THEMED = 2
-DAILYWORDLE = 3
-DAILYPYDLE = 4
+DAILY = 2
+THEMED = 3
 EASY = 1
 INTERMEDIATE = 2
 HARD = 3
@@ -75,9 +75,9 @@ def show_title_and_rules():
     print(colored_title)
 
     print(FBWHITE + '\nHow to play...' + CEND)
-    rules = "1. Letters that are in the answer and in the right place turn ' + BGREEN + 'green' + CEND + '.\n\
-2. Letters that are in the answer but in the wrong place turn ' + BYELLOW + 'yellow' + CEND + '.\n\
-3. Letters that are not in the answer turn ' + BWHITE + 'gray' + CEND + '.\n\
+    rules = "1. Letters that are in the answer and in the right place turn " + BGREEN + "green" + CEND + ".\n\
+2. Letters that are in the answer but in the wrong place turn " + BYELLOW + "yellow" + CEND + ".\n\
+3. Letters that are not in the answer turn " + BWHITE + "gray" + CEND + ".\n\
 4. Letters can appear more than once. So if your guess includes two of one letter, they may both turn yellow, both turn green, or one could be yellow and the other green.\n\
 5. Each guess must be a valid word in the English dictionary. You can't guess ABCDE, for instance.\n"
     print(rules)
@@ -113,11 +113,10 @@ def check_play_or_exit():
 def check_game_mode():
     print(FBWHITE + '\nChoose your game mode:' + CEND)
     print(FBWHITE + '1)' + CEND + FBCYAN + ' Classic' + CEND)
-    print(FBWHITE + '2)' + CEND + FBMAGENTA + ' Themed' + CEND)
-    print(FBWHITE + '3)' + CEND + FBYELLOW + ' Daily Wordle' + CEND)
-    print(FBWHITE + '4)' + CEND + FBBLUE + ' Daily Pydle' + CEND + '\n')
+    print(FBWHITE + '2)' + CEND + FBBLUE + ' Daily Word' + CEND)
+    print(FBWHITE + '3)' + CEND + FBMAGENTA + ' Themed' + CEND + '\n')
 
-    game_mode = get_numeric_option(1, 4)
+    game_mode = get_numeric_option(1, 3)
 
     return game_mode
 
@@ -147,11 +146,11 @@ def get_count_dict(str):
     return count_dict
 
 
-def get_meaning_of_word(secret_word):
-    print(FBWHITE + f'\nMeanings of {secret_word}' + CEND)
+def print_meanings_of_word(word):
+    print(FBWHITE + f'\nMeanings of {word}' + CEND)
 
     dic = PyDictionary()
-    meanings = dic.meaning(secret_word)
+    meanings = dic.meaning(word)
     flat_meanings_list = [item for sublist in meanings.values()
                           for item in sublist]
     num_meanings = min(3, len(flat_meanings_list))
@@ -162,9 +161,20 @@ def get_meaning_of_word(secret_word):
     print()
 
 
-def get_secret_word(file_name):
-    with open(file_name, encoding='utf-8') as words:
-        return choice(words.readlines()).strip()
+def get_random_word(file_name):
+    with open(file_name, encoding='utf-8') as words_file:
+        return choice(words_file.readlines()).strip()
+
+
+def get_daily_word(file_name):
+    start_date = date(2023, 10, 13)
+    today = date.today()
+
+    with open(file_name, encoding='utf-8') as words_file:
+        words = words_file.readlines()
+        day_offset = abs((today - start_date).days) % len(words)
+
+        return words[day_offset].strip()
 
 
 def is_valid_guess(word, word_size):
@@ -188,15 +198,20 @@ def print_guesses(guesses, tries):
         for letter in guess:
             if index == tries - 1:
                 sleep(0.2)
+
             print(letter, end='')
             stdout.flush()
+
         print()
         sleep(0.1)
 
 
-def play(word_size=5, file_name='data/words_5.txt'):
+def play(word_size, file_name, is_daily=False):
     max_tries = word_size + 1
-    secret_word = get_secret_word(file_name)
+    if is_daily:
+        secret_word = get_daily_word(file_name)
+    else:
+        secret_word = get_random_word(file_name)
 
     base_string = f'{BWHITE}_{CEND}'
     guesses = [[base_string]*word_size for _ in range(max_tries)]
@@ -248,7 +263,7 @@ def play(word_size=5, file_name='data/words_5.txt'):
         print('What a bummer :(')
         print(f'The word was "{secret_word}". Try again!')
 
-    get_meaning_of_word(secret_word)
+    print_meanings_of_word(secret_word)
 
 
 def main():
@@ -256,31 +271,22 @@ def main():
     print(FBWHITE + '\nWhat do you want to do now?' + CEND)
     while check_play_or_exit() != EXIT:
         game_mode = check_game_mode()
-        if game_mode == CLASSIC:
+        if game_mode == CLASSIC or game_mode == DAILY:
             difficulty = check_difficulty()
             if difficulty == EASY:
                 word_size = 5
-                file_name = 'data/words_5.txt'
-                play()
+                file_name = 'data/words_easy.txt'
             elif difficulty == INTERMEDIATE:
                 word_size = 6
-                file_name = 'data/words_6.txt'
-                play(word_size, file_name)
+                file_name = 'data/words_intermediate.txt'
             elif difficulty == HARD:
                 word_size = 7
-                file_name = 'data/words_7.txt'
-                play(word_size, file_name)
-            else:
-                # Tratamento de erro
-                pass
+                file_name = 'data/words_hard.txt'
+
+            is_daily = game_mode == DAILY
+            play(word_size, file_name, is_daily)
         elif game_mode == THEMED:
             # Listar temas e lançar jogo
-            pass
-        elif game_mode == DAILYWORDLE:
-            # Daily Wordle
-            pass
-        elif game_mode == DAILYPYDLE:
-            # Daily Pydle
             pass
 
 
