@@ -1,11 +1,12 @@
+import csv
+import os
+import random
+import sys
+import time
+import enchant
 import pandas as pd
-from csv import DictWriter
+
 from datetime import date
-from os import path, makedirs
-from random import choice
-from sys import stdout
-from time import sleep
-from enchant import Dict
 from PyDictionary import PyDictionary
 
 CEND = '\33[0m'
@@ -172,7 +173,7 @@ def print_meanings_of_word(word):
 
 def get_random_word(file_name):
     with open(file_name, encoding='utf-8') as words_file:
-        return choice(words_file.readlines()).strip()
+        return random.choice(words_file.readlines()).strip()
 
 
 def get_daily_word(file_name):
@@ -187,7 +188,7 @@ def get_daily_word(file_name):
 
 
 def is_valid_guess(word, word_size):
-    english_dictionary = Dict('en_US')
+    english_dictionary = enchant.Dict('en_US')
 
     if len(word) != word_size:
         print(f'Your guess must have {word_size} characters!')
@@ -206,22 +207,22 @@ def print_guesses(guesses, tries):
     for (index, guess) in enumerate(guesses):
         for letter in guess:
             if index == tries - 1:
-                sleep(0.2)
+                time.sleep(0.2)
 
             print(letter, end='')
-            stdout.flush()
+            sys.stdout.flush()
 
         print()
-        sleep(0.1)
+        time.sleep(0.1)
 
 
 def save_daily_word_results(tries, word_size):
-    file_exists = path.exists(SAVE_FILE)
-    makedirs(SAVE_DIR, exist_ok=True)
+    file_exists = os.path.exists(SAVE_FILE)
+    os.makedirs(SAVE_DIR, exist_ok=True)
 
     with open(SAVE_FILE, mode='a') as save_file:
         fields = ['Date', 'WordSize', 'Tries']
-        csv_writer = DictWriter(
+        csv_writer = csv.DictWriter(
             save_file, fieldnames=fields, delimiter=',')
 
         if not file_exists:
@@ -233,7 +234,7 @@ def save_daily_word_results(tries, word_size):
 
 
 def already_played_daily_word_today(word_size):
-    if not path.exists(SAVE_FILE):
+    if not os.path.exists(SAVE_FILE):
         return False
 
     daily = pd.read_csv(SAVE_FILE, sep=',')
