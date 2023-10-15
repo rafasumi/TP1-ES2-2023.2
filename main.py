@@ -1,4 +1,7 @@
+import pandas as pd
+from csv import DictWriter
 from datetime import date
+from os import path, makedirs
 from random import choice
 from sys import stdout
 from time import sleep
@@ -31,6 +34,12 @@ FBBLUE = '\33[1;30;94m'
 FBMAGENTA = '\33[1;30;95m'
 FBCYAN = '\33[1;30;96m'
 FBWHITE = '\33[1;30;97m'
+
+EASY_WORDS_FILE = 'data/words_easy.txt'
+INTERMEDIATE_WORDS_FILE = 'data/words_intermediate.txt'
+HARD_WORDS_FILE = 'data/words_hard.txt'
+SAVE_DIR = 'data/save'
+SAVE_FILE = f'{SAVE_DIR}/daily.csv'
 
 EXIT = 2
 CLASSIC = 1
@@ -134,10 +143,10 @@ def check_difficulty():
     return difficulty
 
 
-def get_count_dict(str):
-    count_dict = dict()
+def get_count_dict(string):
+    count_dict = {}
 
-    for char in str:
+    for char in string:
         if char in count_dict:
             count_dict[char] += 1
         else:
@@ -206,9 +215,40 @@ def print_guesses(guesses, tries):
         sleep(0.1)
 
 
+def save_daily_word_results(tries, word_size):
+    file_exists = path.exists(SAVE_FILE)
+    makedirs(SAVE_DIR, exist_ok=True)
+
+    with open(SAVE_FILE, mode='a') as save_file:
+        fields = ['Date', 'WordSize', 'Tries']
+        csv_writer = DictWriter(
+            save_file, fieldnames=fields, delimiter=',')
+
+        if not file_exists:
+            csv_writer.writeheader()
+
+        today_isoformat = date.today().isoformat()
+        csv_writer.writerow(
+            {'Date': today_isoformat, 'WordSize': word_size, 'Tries': tries})
+
+
+def already_played_daily_word_today(word_size):
+    if not path.exists(SAVE_FILE):
+        return False
+
+    daily = pd.read_csv(SAVE_FILE, sep=',')
+    today_isoformat = date.today().isoformat()
+
+    return ((daily.Date == today_isoformat) & (daily.WordSize == word_size)).any()
+
+
 def play(word_size, file_name, is_daily=False):
     max_tries = word_size + 1
     if is_daily:
+        if already_played_daily_word_today(word_size):
+            print("You've already played today's word in this difficulty!\n")
+            return
+
         secret_word = get_daily_word(file_name)
     else:
         secret_word = get_random_word(file_name)
@@ -231,7 +271,7 @@ def play(word_size, file_name, is_daily=False):
 
         print()
 
-        uncolored_indexes = list()
+        uncolored_indexes = []
         count_dict = get_count_dict(secret_word)
         for (index, char) in enumerate(guessed_word):
             if char == secret_word[index]:
@@ -265,23 +305,26 @@ def play(word_size, file_name, is_daily=False):
 
     print_meanings_of_word(secret_word)
 
+    if is_daily:
+        save_daily_word_results(tries, word_size)
+
 
 def main():
     show_title_and_rules()
     print(FBWHITE + '\nWhat do you want to do now?' + CEND)
     while check_play_or_exit() != EXIT:
         game_mode = check_game_mode()
-        if game_mode == CLASSIC or game_mode == DAILY:
+        if game_mode in (CLASSIC, DAILY):
             difficulty = check_difficulty()
             if difficulty == EASY:
                 word_size = 5
-                file_name = 'data/words_easy.txt'
+                file_name = EASY_WORDS_FILE
             elif difficulty == INTERMEDIATE:
                 word_size = 6
-                file_name = 'data/words_intermediate.txt'
+                file_name = INTERMEDIATE_WORDS_FILE
             elif difficulty == HARD:
                 word_size = 7
-                file_name = 'data/words_hard.txt'
+                file_name = HARD_WORDS_FILE
 
             is_daily = game_mode == DAILY
             play(word_size, file_name, is_daily)
