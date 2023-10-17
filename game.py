@@ -7,7 +7,6 @@ import enchant
 import pandas as pd
 from datetime import date
 
-
 def get_count_dict(string):
     count_dict = {}
 
@@ -78,6 +77,8 @@ def already_played_daily_word_today(word_size):
 
     return ((daily.Date == today_isoformat) & (daily.WordSize == word_size)).any()
 
+def init_color_dict():
+    return {letter: consts.FBWHITE for letter in consts.letters}
 
 def play(word_size, file_name, is_daily=False):
     max_tries = word_size + 1
@@ -96,8 +97,12 @@ def play(word_size, file_name, is_daily=False):
     tries = 0
     victory = False
 
+    color_dict = init_color_dict()
+
     while tries < max_tries:
         display.print_guesses(guesses, tries)
+        print()
+        display.print_colored_keyboard(consts.letters, color_dict)
 
         while True:
             print('Type your guess: ', end='')
@@ -113,6 +118,7 @@ def play(word_size, file_name, is_daily=False):
         for (index, char) in enumerate(guessed_word):
             if char == secret_word[index]:
                 guesses[tries][index] = consts.BGREEN + char + consts.CEND
+                color_dict.update({char: consts.FBGREEN})
                 count_dict[char] -= 1
             else:
                 uncolored_indexes.append(index)
@@ -121,9 +127,12 @@ def play(word_size, file_name, is_daily=False):
             char = guessed_word[index]
             if char in count_dict and count_dict.get(char) > 0:
                 guesses[tries][index] = consts.BYELLOW + char + consts.CEND
+                if color_dict[char] != consts.FBGREEN: 
+                    color_dict.update({char: consts.FBYELLOW})
                 count_dict[char] -= 1
             else:
                 guesses[tries][index] = consts.BWHITE + char + consts.CEND
+                color_dict.update({char: consts.FBLACK})
 
         tries += 1
 

@@ -119,15 +119,45 @@ def print_guesses(guesses, tries):
 
 
 def print_meanings_of_word(word):
-    print(consts.FBWHITE + f'\nMeanings of {word}' + consts.CEND)
 
     dic = PyDictionary()
-    meanings = dic.meaning(word)
+    meanings = dic.meaning(word, disable_errors=True)
+    if meanings is None:
+        return
+    
     flat_meanings_list = [item for sublist in meanings.values()
                           for item in sublist]
     num_meanings = min(3, len(flat_meanings_list))
+    
+    print(consts.FBWHITE + f'\nMeanings of {word}' + consts.CEND)
 
     for i in range(num_meanings):
         print(' - ' + flat_meanings_list[i])
 
     print()
+
+def print_colored_key(letter, color_dict):
+    key = "| " + color_dict[letter] + letter + consts.CEND + " "
+    return key
+
+def print_colored_keyboard(letters, color_dict):
+    keyboard = "+---+---+---+---+---+---+---+---+---+---+\n"
+    count_letters = 0
+    first_row = 10
+    for i in range(first_row):
+        keyboard += print_colored_key(letters[i], color_dict)
+
+    keyboard += "|\n+---+---+---+---+---+---+---+---+---+---+\n  "
+    count_letters += first_row
+    second_row = 9
+    for i in range(second_row):
+        keyboard += print_colored_key(letters[i + count_letters], color_dict)
+    keyboard += "|\n  +---+---+---+---+---+---+---+---+---+\n      "
+    count_letters += second_row
+    third_row = 7
+    for i in range(third_row):
+        keyboard += print_colored_key(letters[i + count_letters], color_dict)
+    
+    keyboard += "|\n      +---+---+---+---+---+---+---+\n"
+
+    print(keyboard)

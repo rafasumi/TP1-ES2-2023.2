@@ -17,6 +17,7 @@ BBMAGENTA = '\33[1;30;105m'
 BBCYAN = '\33[1;30;106m'
 BBWHITE = '\33[1;30;107m'
 # Font colors
+FBLACK = '\33[1;30;30m'
 FBRED = '\33[1;30;91m'
 FBGREEN = '\33[1;30;92m'
 FBYELLOW = '\33[1;30;93m'
@@ -40,3 +41,8 @@ THEMED = 3
 EASY = 1
 INTERMEDIATE = 2
 HARD = 3
+
+# List of letters
+letters = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 
+           'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+           'Z', 'X', 'C', 'V', 'B', 'N', 'M']
