@@ -91,6 +91,8 @@ def play(word_size, file_name, is_daily=False):
     else:
         secret_word = get_random_word(file_name)
 
+    secret_word = 'GAITS'
+
     base_string = f'{consts.BWHITE}_{consts.CEND}'
     guesses = [[base_string]*word_size for _ in range(max_tries)]
 
@@ -144,9 +146,11 @@ def play(word_size, file_name, is_daily=False):
     print()
 
     if victory:
-        print('Congratulations! You won!!')
+        print('Congratulations!')
+        display.print_winning_art()
     else:
         print('What a bummer :(')
+        display.print_losing_art()
         print(f'The word was "{secret_word}". Try again!')
 
     display.print_meanings_of_word(secret_word)

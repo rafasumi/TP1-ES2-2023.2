@@ -136,9 +136,11 @@ def print_meanings_of_word(word):
 
     print()
 
+
 def print_colored_key(letter, color_dict):
     key = "| " + color_dict[letter] + letter + consts.CEND + " "
     return key
+
 
 def print_colored_keyboard(letters, color_dict):
     keyboard = "+---+---+---+---+---+---+---+---+---+---+\n"
@@ -161,3 +163,35 @@ def print_colored_keyboard(letters, color_dict):
     keyboard += "|\n      +---+---+---+---+---+---+---+\n"
 
     print(keyboard)
+
+
+def print_winning_art():
+    art = "                                                         _  _  \n\
+                                                        | || | \n\
+  _   __   .--.   __   _    _   _   __   .--.   _ .--.  | || | \n\
+ [ \ [  ]/ .'`\ \[  | | |  [ \ [ \ [  ]/ .'`\ \[ `.-. | | || | \n\
+  \ '/ / | \__. | | \_/ |,  \ \/\ \/ / | \__. | | | | | |_||_| \n\
+[\_:  /   '.__.'  '.__.'_/   \__/\__/   '.__.' [___||__](_)(_) \n\
+ \__.'                                                         \n\n\
+"
+
+    colored_text = ""
+    for char in art:
+        colored_text += consts.FBGREEN + char + consts.CEND
+    
+    print(colored_text)
+
+
+def print_losing_art():
+    art = "                           ,--.               ,--.   \n\
+,--. ,--.,---. ,--.,--.    |  | ,---.  ,---.,-'  '-. \n\
+ \  '  /| .-. ||  ||  |    |  || .-. |(  .-''-.  .-' \n\
+  \   ' ' '-' ''  ''  '    |  |' '-' '.-'  `) |  |   \n\
+.-'  /   `---'  `----'     `--' `---' `----'  `--'   \n\
+`---'\n"
+
+    colored_text = ""
+    for char in art:
+        colored_text += consts.FBRED + char + consts.CEND
+    
+    print(colored_text)
