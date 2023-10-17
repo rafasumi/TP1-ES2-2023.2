@@ -91,8 +91,6 @@ def play(word_size, file_name, is_daily=False):
     else:
         secret_word = get_random_word(file_name)
 
-    secret_word = 'GAITS'
-
     base_string = f'{consts.BWHITE}_{consts.CEND}'
     guesses = [[base_string]*word_size for _ in range(max_tries)]
 
