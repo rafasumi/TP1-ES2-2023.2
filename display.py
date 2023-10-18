@@ -1,6 +1,10 @@
 import constants as consts
+import game
+import math
+import os
 import sys
 import time
+import pandas as pd
 from PyDictionary import PyDictionary
 
 
@@ -124,11 +128,11 @@ def print_meanings_of_word(word):
     meanings = dic.meaning(word, disable_errors=True)
     if meanings is None:
         return
-    
+
     flat_meanings_list = [item for sublist in meanings.values()
                           for item in sublist]
     num_meanings = min(3, len(flat_meanings_list))
-    
+
     print(consts.FBWHITE + f'\nMeanings of {word}' + consts.CEND)
 
     for i in range(num_meanings):
@@ -159,7 +163,7 @@ def print_colored_keyboard(letters, color_dict):
     third_row = 7
     for i in range(third_row):
         keyboard += print_colored_key(letters[i + count_letters], color_dict)
-    
+
     keyboard += "|\n      +---+---+---+---+---+---+---+\n"
 
     print(keyboard)
@@ -178,7 +182,7 @@ def print_winning_art():
     colored_text = ""
     for char in art:
         colored_text += consts.FBGREEN + char + consts.CEND
-    
+
     print(colored_text)
 
 
@@ -193,5 +197,63 @@ def print_losing_art():
     colored_text = ""
     for char in art:
         colored_text += consts.FBRED + char + consts.CEND
-    
+
     print(colored_text)
+
+
+def print_daily_statistics(times_played, difficulty, win_rate):
+    print(f'{consts.FBWHITE}Statistics{consts.CEND}')
+
+    print(f'\tYou played Daily Word {consts.FBMAGENTA}{times_played}{consts.CEND} \
+times in {difficulty} difficulty')
+
+    print(
+        f'\tYou have won {consts.FBCYAN}{win_rate:.2%}{consts.CEND} of times!')
+
+
+def print_distribution(occurrences_of_number_of_tries, most_common_number_of_tries,
+                       tries_last_game, max_tries):
+    terminal_width = os.get_terminal_size().columns
+    total_width = terminal_width / 3
+
+    print(f'{consts.FBWHITE}Guess distribution{consts.CEND}')
+    for i_tries in range(1, max_tries + 1):
+        print(f'\t{consts.FBWHITE}{i_tries}:{consts.CEND} ', end='')
+
+        if i_tries in occurrences_of_number_of_tries:
+            ratio = occurrences_of_number_of_tries[i_tries] / \
+                most_common_number_of_tries
+            width = math.ceil(ratio * total_width)
+        else:
+            width = 0
+
+        if i_tries == tries_last_game:
+            bar = consts.BGREEN + ' ' + consts.CEND
+        else:
+            bar = consts.BGRAY + ' ' + consts.CEND
+
+        for _ in range(width):
+            print(bar, end='')
+
+        print()
+
+
+def print_statistics_and_distribution(word_size, max_tries, tries_last_game):
+    time.sleep(0.2)
+
+    daily_history = pd.read_csv(consts.SAVE_FILE, sep=',')
+
+    daily_history = daily_history[daily_history.WordSize == word_size]
+    successful_daily_history = daily_history[daily_history.Victory == True]
+
+    difficulty = game.get_difficulty_name(word_size)
+    times_played = len(daily_history)
+    win_rate = len(successful_daily_history) / len(daily_history)
+    print_daily_statistics(times_played, difficulty, win_rate)
+
+    occurrences_of_number_of_tries = successful_daily_history.Tries.value_counts()
+    most_common_number_of_tries = occurrences_of_number_of_tries.max()
+    print_distribution(occurrences_of_number_of_tries,
+                       most_common_number_of_tries, tries_last_game, max_tries)
+    
+    print()

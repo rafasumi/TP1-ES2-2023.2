@@ -7,6 +7,7 @@ import enchant
 import pandas as pd
 from datetime import date
 
+
 def get_count_dict(string):
     count_dict = {}
 
@@ -51,12 +52,12 @@ def is_valid_guess(word, word_size):
     return True
 
 
-def save_daily_word_results(tries, word_size):
+def save_daily_word_results(tries, word_size, victory):
     file_exists = os.path.exists(consts.SAVE_FILE)
     os.makedirs(consts.SAVE_DIR, exist_ok=True)
 
     with open(consts.SAVE_FILE, mode='a') as save_file:
-        fields = ['Date', 'WordSize', 'Tries']
+        fields = ['Date', 'WordSize', 'Tries', 'Victory']
         csv_writer = csv.DictWriter(
             save_file, fieldnames=fields, delimiter=',')
 
@@ -65,7 +66,8 @@ def save_daily_word_results(tries, word_size):
 
         today_isoformat = date.today().isoformat()
         csv_writer.writerow(
-            {'Date': today_isoformat, 'WordSize': word_size, 'Tries': tries})
+            {'Date': today_isoformat, 'WordSize': word_size, 'Tries': tries,
+             'Victory': victory})
 
 
 def already_played_daily_word_today(word_size):
@@ -77,8 +79,16 @@ def already_played_daily_word_today(word_size):
 
     return ((daily.Date == today_isoformat) & (daily.WordSize == word_size)).any()
 
+
 def init_color_dict():
     return {letter: consts.FBWHITE for letter in consts.letters}
+
+
+def get_difficulty_name(word_size):
+    difficulty_map = {5: 'Easy', 6: 'Intermediate', 7: 'Hard'}
+
+    return difficulty_map[word_size]
+
 
 def play(word_size, file_name, is_daily=False):
     max_tries = word_size + 1
@@ -127,7 +137,7 @@ def play(word_size, file_name, is_daily=False):
             char = guessed_word[index]
             if char in count_dict and count_dict.get(char) > 0:
                 guesses[tries][index] = consts.BYELLOW + char + consts.CEND
-                if color_dict[char] != consts.FBGREEN: 
+                if color_dict[char] != consts.FBGREEN:
                     color_dict.update({char: consts.FBYELLOW})
                 count_dict[char] -= 1
             else:
@@ -154,4 +164,5 @@ def play(word_size, file_name, is_daily=False):
     display.print_meanings_of_word(secret_word)
 
     if is_daily:
-        save_daily_word_results(tries, word_size)
+        save_daily_word_results(tries, word_size, victory)
+        display.print_statistics_and_distribution(word_size, max_tries, tries)
