@@ -23,8 +23,17 @@ def main():
             is_daily = game_mode == consts.DAILY
             game.play(word_size, file_name, is_daily)
         elif game_mode == consts.THEMED:
-            # Listar temas e lançar jogo
-            pass
+            theme = display.check_theme()
+            word_size = 5
+            if theme == consts.FOOD:
+                file_name = consts.FOOD_WORDS_FILE
+            elif theme == consts.MUSIC:
+                file_name = consts.MUSIC_WORDS_FILE
+            elif theme == consts.BODY:
+                file_name = consts.BODY_WORDS_FILE
+            elif theme == consts.SPORTS:
+                file_name = consts.SPORTS_WORDS_FILE
+            game.play(word_size, file_name)
 
 
 if __name__ == '__main__':

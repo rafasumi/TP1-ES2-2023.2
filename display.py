@@ -109,6 +109,24 @@ def check_difficulty():
     return difficulty
 
 
+def check_theme():
+    print(consts.FBWHITE + '\nChoose theme:' + consts.CEND)
+    print(consts.FBWHITE + '1)' + consts.CEND +
+          consts.FBYELLOW + ' Food' + consts.CEND)
+    print(consts.FBWHITE + '2)' + consts.CEND +
+          consts.FBMAGENTA + ' Music' + consts.CEND)
+    print(consts.FBWHITE + '3)' + consts.CEND +
+          consts.FBCYAN + ' Body parts' + consts.CEND)
+    print(consts.FBWHITE + '4)' + consts.CEND +
+          consts.FBGREEN + ' Sports' + consts.CEND + '\n')
+
+    theme = get_numeric_option(1, 4)
+
+    print()
+
+    return theme
+
+
 def print_guesses(guesses, tries):
     for (index, guess) in enumerate(guesses):
         for letter in guess:

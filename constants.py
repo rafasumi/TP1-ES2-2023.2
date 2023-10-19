@@ -30,6 +30,10 @@ FBWHITE = '\33[1;30;97m'
 EASY_WORDS_FILE = 'data/words_easy.txt'
 INTERMEDIATE_WORDS_FILE = 'data/words_intermediate.txt'
 HARD_WORDS_FILE = 'data/words_hard.txt'
+FOOD_WORDS_FILE = 'data/words_food.txt'
+MUSIC_WORDS_FILE = 'data/words_music.txt'
+BODY_WORDS_FILE = 'data/words_body.txt'
+SPORTS_WORDS_FILE = 'data/words_sports.txt'
 SAVE_DIR = 'data/save'
 SAVE_FILE = f'{SAVE_DIR}/daily.csv'
 
@@ -41,6 +45,10 @@ THEMED = 3
 EASY = 1
 INTERMEDIATE = 2
 HARD = 3
+FOOD = 1
+MUSIC = 2
+BODY = 3
+SPORTS = 4
 
 # List of letters
 letters = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
