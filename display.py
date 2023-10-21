@@ -11,7 +11,8 @@ import constants as consts
 
 def show_title_and_rules():
     welcome_text = 'Welcome to...'
-    title = " .----------------.  .----------------.  .----------------.  .----------------.  .----------------.\n\
+    title = "\
+ .----------------.  .----------------.  .----------------.  .----------------.  .----------------.\n\
 | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |\n\
 | |   ______     | || |  ____  ____  | || |  ________    | || |   _____      | || |  _________   | |\n\
 | |  |_   __ \   | || | |_  _||_  _| | || | |_   ___ `.  | || |  |_   _|     | || | |_   ___  |  | |\n\
@@ -43,11 +44,14 @@ def show_title_and_rules():
     print(colored_title)
 
     print(consts.FBWHITE + '\nHow to play...' + consts.CEND)
-    rules = "1. Letters that are in the answer and in the right place turn " + consts.BGREEN + "green" + consts.CEND + ".\n\
+    rules = "\
+1. Letters that are in the answer and in the right place turn " + consts.BGREEN + "green" + consts.CEND + ".\n\
 2. Letters that are in the answer but in the wrong place turn " + consts.BYELLOW + "yellow" + consts.CEND + ".\n\
 3. Letters that are not in the answer turn " + consts.BWHITE + "gray" + consts.CEND + ".\n\
-4. Letters can appear more than once. So if your guess includes two of one letter, they may both turn yellow, both turn green, or one could be yellow and the other green.\n\
-5. Each guess must be a valid word in the English dictionary. You can't guess ABCDE, for instance.\n"
+4. Letters can appear more than once. So if your guess includes two of one letter, they may both turn yellow, \
+both turn green, or one could be yellow and the other green.\n\
+5. Each guess must be a valid word in the English dictionary. You can't guess ABCDE, for instance.\n\
+6. The guesses are case insensitive, which means that it doesn't matter whether you write in lower or upper case.\n"
     print(rules)
 
 
@@ -96,11 +100,11 @@ def check_game_mode():
 def check_difficulty():
     print(consts.FBWHITE + '\nChoose difficulty:' + consts.CEND)
     print(consts.FBWHITE + '1)' + consts.CEND +
-          consts.FBGREEN + ' Easy' + consts.CEND)
+          consts.FBGREEN + ' Easy (5 letters)' + consts.CEND)
     print(consts.FBWHITE + '2)' + consts.CEND +
-          consts.FBYELLOW + ' Intermediate' + consts.CEND)
+          consts.FBYELLOW + ' Intermediate (6 letters)' + consts.CEND)
     print(consts.FBWHITE + '3)' + consts.CEND +
-          consts.FBRED + ' Hard' + consts.CEND + '\n')
+          consts.FBRED + ' Hard (7 letters)' + consts.CEND + '\n')
 
     difficulty = get_numeric_option(1, 3)
 
@@ -187,7 +191,8 @@ def print_colored_keyboard(color_dict):
 
 
 def print_winning_art():
-    art = "                                                         _  _  \n\
+    art = "\
+                                                         _  _  \n\
                                                         | || | \n\
   _   __   .--.   __   _    _   _   __   .--.   _ .--.  | || | \n\
  [ \ [  ]/ .'`\ \[  | | |  [ \ [ \ [  ]/ .'`\ \[ `.-. | | || | \n\
@@ -204,7 +209,8 @@ def print_winning_art():
 
 
 def print_losing_art():
-    art = "                           ,--.               ,--.   \n\
+    art = "\
+                           ,--.               ,--.   \n\
 ,--. ,--.,---. ,--.,--.    |  | ,---.  ,---.,-'  '-. \n\
  \  '  /| .-. ||  ||  |    |  || .-. |(  .-''-.  .-' \n\
   \   ' ' '-' ''  ''  '    |  |' '-' '.-'  `) |  |   \n\
