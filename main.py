@@ -1,9 +1,22 @@
+import threading
+
+from playsound import playsound
+
 import constants as consts
 import display
 import game
 
 
+def background_music_loop():
+    while True:
+        playsound('assets/sound/here_comes_the_sun.ogg', block=True)
+
+
 def main():
+    music_thread = threading.Thread(
+        target=background_music_loop, daemon=True, name='backgroundMusic')
+    music_thread.start()
+
     display.show_title_and_rules()
     print(consts.FBWHITE + '\nWhat do you want to do now?' + consts.CEND)
     while display.check_play_or_exit() != consts.EXIT:
@@ -37,4 +50,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except EOFError:
+        pass
+    except KeyboardInterrupt:
+        pass

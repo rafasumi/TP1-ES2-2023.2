@@ -51,6 +51,8 @@ BODY = 3
 SPORTS = 4
 
 # List of letters
-letters = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+LETTERS = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
            'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
            'Z', 'X', 'C', 'V', 'B', 'N', 'M']
+
+DIFFICULTY_MAP = {5: 'Easy', 6: 'Intermediate', 7: 'Hard'}

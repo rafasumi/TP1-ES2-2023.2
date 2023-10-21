@@ -1,11 +1,14 @@
-import constants as consts
-import display
 import csv
 import os
 import random
+import readline
+
 import enchant
 import pandas as pd
 from datetime import date
+
+import constants as consts
+import display
 
 
 def get_count_dict(string):
@@ -81,13 +84,7 @@ def already_played_daily_word_today(word_size):
 
 
 def init_color_dict():
-    return {letter: consts.FBWHITE for letter in consts.letters}
-
-
-def get_difficulty_name(word_size):
-    difficulty_map = {5: 'Easy', 6: 'Intermediate', 7: 'Hard'}
-
-    return difficulty_map[word_size]
+    return {letter: consts.FBWHITE for letter in consts.LETTERS}
 
 
 def play(word_size, file_name, is_daily=False):
@@ -112,11 +109,10 @@ def play(word_size, file_name, is_daily=False):
     while tries < max_tries:
         display.print_guesses(guesses, tries)
         print()
-        display.print_colored_keyboard(consts.letters, color_dict)
+        display.print_colored_keyboard(color_dict)
 
         while True:
-            print('Type your guess: ', end='')
-            guessed_word = input().strip().upper()
+            guessed_word = input('Type your guess: ').strip().upper()
 
             if is_valid_guess(guessed_word, word_size):
                 break
@@ -162,6 +158,7 @@ def play(word_size, file_name, is_daily=False):
         print(f'The word was "{secret_word}". Try again!')
 
     display.print_meanings_of_word(secret_word)
+    print()
 
     if is_daily:
         save_daily_word_results(tries, word_size, victory)

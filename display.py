@@ -1,11 +1,12 @@
-import constants as consts
-import game
 import math
 import os
-import sys
+import readline
 import time
+
 import pandas as pd
 from PyDictionary import PyDictionary
+
+import constants as consts
 
 
 def show_title_and_rules():
@@ -52,8 +53,7 @@ def show_title_and_rules():
 
 def get_numeric_option(start, end):
     while True:
-        print('Select: ', end='')
-        option = input().strip()
+        option = input('Select: ').strip()
         if not option.isnumeric():
             print('You must give a number!')
             continue
@@ -133,8 +133,7 @@ def print_guesses(guesses, tries):
             if index == tries - 1:
                 time.sleep(0.2)
 
-            print(letter, end='')
-            sys.stdout.flush()
+            print(letter, end='', flush=True)
 
         print()
         time.sleep(0.1)
@@ -156,31 +155,31 @@ def print_meanings_of_word(word):
     for i in range(num_meanings):
         print(' - ' + flat_meanings_list[i])
 
-    print()
-
 
 def print_colored_key(letter, color_dict):
     key = "| " + color_dict[letter] + letter + consts.CEND + " "
     return key
 
 
-def print_colored_keyboard(letters, color_dict):
+def print_colored_keyboard(color_dict):
     keyboard = "+---+---+---+---+---+---+---+---+---+---+\n"
     count_letters = 0
     first_row = 10
     for i in range(first_row):
-        keyboard += print_colored_key(letters[i], color_dict)
+        keyboard += print_colored_key(consts.LETTERS[i], color_dict)
 
     keyboard += "|\n+---+---+---+---+---+---+---+---+---+---+\n  "
     count_letters += first_row
     second_row = 9
     for i in range(second_row):
-        keyboard += print_colored_key(letters[i + count_letters], color_dict)
+        keyboard += print_colored_key(
+            consts.LETTERS[i + count_letters], color_dict)
     keyboard += "|\n  +---+---+---+---+---+---+---+---+---+\n      "
     count_letters += second_row
     third_row = 7
     for i in range(third_row):
-        keyboard += print_colored_key(letters[i + count_letters], color_dict)
+        keyboard += print_colored_key(
+            consts.LETTERS[i + count_letters], color_dict)
 
     keyboard += "|\n      +---+---+---+---+---+---+---+\n"
 
@@ -264,7 +263,7 @@ def print_statistics_and_distribution(word_size, max_tries, tries_last_game):
     daily_history = daily_history[daily_history.WordSize == word_size]
     successful_daily_history = daily_history[daily_history.Victory == True]
 
-    difficulty = game.get_difficulty_name(word_size)
+    difficulty = consts.DIFFICULTY_MAP[word_size]
     times_played = len(daily_history)
     win_rate = len(successful_daily_history) / len(daily_history)
     print_daily_statistics(times_played, difficulty, win_rate)
@@ -273,5 +272,5 @@ def print_statistics_and_distribution(word_size, max_tries, tries_last_game):
     most_common_number_of_tries = occurrences_of_number_of_tries.max()
     print_distribution(occurrences_of_number_of_tries,
                        most_common_number_of_tries, tries_last_game, max_tries)
-    
+
     print()
