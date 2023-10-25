@@ -110,6 +110,16 @@ def compute_guess_colors(guessed_word, secret_word, count_dict, color_dict, gues
             color_dict.update({char: consts.FBLACK})
 
 
+def get_user_guess(word_size):
+    while True:
+        guessed_word = input('Type your guess: ').strip().upper()
+
+        if is_valid_guess(guessed_word, word_size):
+            break
+    
+    return guessed_word
+
+
 def play(word_size, file_name, is_daily=False):
     max_tries = word_size + 1
     if is_daily:
@@ -134,11 +144,7 @@ def play(word_size, file_name, is_daily=False):
         print()
         display.print_colored_keyboard(color_dict)
 
-        while True:
-            guessed_word = input('Type your guess: ').strip().upper()
-
-            if is_valid_guess(guessed_word, word_size):
-                break
+        guessed_word = get_user_guess(word_size)
 
         print()
 
