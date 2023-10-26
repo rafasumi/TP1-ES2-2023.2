@@ -11,16 +11,16 @@ import constants as consts
 import display
 
 
-def get_count_dict(string):
-    count_dict = {}
+def compute_char_count(string):
+    char_count = {}
 
     for char in string:
-        if char in count_dict:
-            count_dict[char] += 1
+        if char in char_count:
+            char_count[char] += 1
         else:
-            count_dict[char] = 1
+            char_count[char] = 1
 
-    return count_dict
+    return char_count
 
 
 def get_random_word(file_name):
@@ -87,24 +87,24 @@ def init_color_dict():
     return {letter: consts.FBWHITE for letter in consts.LETTERS}
 
 
-def compute_guess_colors(guessed_word, secret_word, count_dict, color_dict, guess_display):
+def compute_guess_colors(guessed_word, secret_word, char_count, color_dict, guess_display):
     uncolored_indexes = []
 
     for (index, char) in enumerate(guessed_word):
         if char == secret_word[index]:
             guess_display[index] = consts.BGREEN + char + consts.CEND
             color_dict.update({char: consts.FBGREEN})
-            count_dict[char] -= 1
+            char_count[char] -= 1
         else:
             uncolored_indexes.append(index)
 
     for index in uncolored_indexes:
         char = guessed_word[index]
-        if char in count_dict and count_dict.get(char) > 0:
+        if char in char_count and char_count.get(char) > 0:
             guess_display[index] = consts.BYELLOW + char + consts.CEND
             if color_dict[char] != consts.FBGREEN:
                 color_dict.update({char: consts.FBYELLOW})
-            count_dict[char] -= 1
+            char_count[char] -= 1
         else:
             guess_display[index] = consts.BWHITE + char + consts.CEND
             color_dict.update({char: consts.FBLACK})
@@ -148,9 +148,9 @@ def play(word_size, file_name, is_daily=False):
 
         print()
 
-        count_dict = get_count_dict(secret_word)
+        char_count = compute_char_count(secret_word)
 
-        compute_guess_colors(guessed_word, secret_word, count_dict, color_dict, guesses[tries])
+        compute_guess_colors(guessed_word, secret_word, char_count, color_dict, guesses[tries])
 
         tries += 1
 
