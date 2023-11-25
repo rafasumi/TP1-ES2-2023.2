@@ -18,7 +18,7 @@ class InputHandler:
 
         return True
 
-    def _get_numeric_option(self, start, end):
+    def get_numeric_option(self, start, end):
         while True:
             option = input('Select: ').strip()
 
@@ -35,7 +35,7 @@ class InputHandler:
         print(consts.FBWHITE + '2)' + consts.CEND +
               consts.FBRED + ' Exit' + consts.CEND + '\n')
 
-        decision = self._get_numeric_option(1, 2)
+        decision = self.get_numeric_option(1, 2)
 
         return decision
 
@@ -48,7 +48,7 @@ class InputHandler:
         print(consts.FBWHITE + '3)' + consts.CEND +
               consts.FBMAGENTA + ' Themed' + consts.CEND + '\n')
 
-        game_mode = self._get_numeric_option(1, 3)
+        game_mode = self.get_numeric_option(1, 3)
 
         return game_mode
 
@@ -61,7 +61,7 @@ class InputHandler:
         print(consts.FBWHITE + '3)' + consts.CEND +
               consts.FBRED + ' Hard (7 letters)' + consts.CEND + '\n')
 
-        difficulty = self._get_numeric_option(1, 3)
+        difficulty = self.get_numeric_option(1, 3)
 
         print()
 
@@ -78,7 +78,7 @@ class InputHandler:
         print(consts.FBWHITE + '4)' + consts.CEND +
               consts.FBGREEN + ' Sports' + consts.CEND + '\n')
 
-        theme = self._get_numeric_option(1, 4)
+        theme = self.get_numeric_option(1, 4)
 
         print()
 

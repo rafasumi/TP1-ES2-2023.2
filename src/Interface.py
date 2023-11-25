@@ -12,10 +12,10 @@ class Interface:
         self.dic = PyDictionary()
 
     def display_title_and_rules(self):
-        self._display_title()
-        self._display_rules()
+        self.display_title()
+        self.display_rules()
 
-    def _display_title(self):
+    def display_title(self):
         welcome_text = 'Welcome to...'
         title = "\
     .----------------.  .----------------.  .----------------.  .----------------.  .----------------.\n\
@@ -49,14 +49,14 @@ class Interface:
 
         print(colored_title)
 
-    def _display_rules(self):
+    def display_rules(self):
         print(consts.FBWHITE + '\nHow to play...' + consts.CEND)
         rules = "\
     1. Letters that are in the answer and in the right place turn " + consts.BGREEN + "green" + consts.CEND + ".\n\
     2. Letters that are in the answer but in the wrong place turn " + consts.BYELLOW + "yellow" + consts.CEND + ".\n\
     3. Letters that are not in the answer turn " + consts.BWHITE + "gray" + consts.CEND + ".\n\
     4. Letters can appear more than once. So if your guess includes two of one letter, they may both turn yellow, \
-    both turn green, or one could be yellow and the other green.\n\
+both turn green, or one could be yellow and the other green.\n\
     5. Each guess must be a valid word in the English dictionary. You can't guess ABCDE, for instance.\n\
     6. The guesses are case insensitive, which means that it doesn't matter whether you write in lower or upper case.\n"
         print(rules)
@@ -91,26 +91,27 @@ class Interface:
         count_letters = 0
         first_row = 10
         for i in range(first_row):
-            keyboard += self._display_colored_key(consts.LETTERS[i], color_dict)
+            keyboard += self.display_colored_key(
+                consts.LETTERS[i], color_dict)
 
         keyboard += "|\n+---+---+---+---+---+---+---+---+---+---+\n  "
         count_letters += first_row
         second_row = 9
         for i in range(second_row):
-            keyboard += self._display_colored_key(
+            keyboard += self.display_colored_key(
                 consts.LETTERS[i + count_letters], color_dict)
         keyboard += "|\n  +---+---+---+---+---+---+---+---+---+\n      "
         count_letters += second_row
         third_row = 7
         for i in range(third_row):
-            keyboard += self._display_colored_key(
+            keyboard += self.display_colored_key(
                 consts.LETTERS[i + count_letters], color_dict)
 
         keyboard += "|\n      +---+---+---+---+---+---+---+\n"
 
         print(keyboard)
 
-    def _display_colored_key(self, letter, color_dict):
+    def display_colored_key(self, letter, color_dict):
         key = "| " + color_dict[letter] + letter + consts.CEND + " "
         return key
 
@@ -153,13 +154,13 @@ class Interface:
          most_common_number_of_tries) = daily_word.compute_statistics(word_size)
         max_tries = word_size + 1
 
-        self._display_daily_statistics(times_played, difficulty, win_rate)
-        self._display_distribution(occurrences_of_number_of_tries,
-                                 most_common_number_of_tries, tries_last_game, max_tries)
+        self.display_daily_statistics(times_played, difficulty, win_rate)
+        self.display_distribution(occurrences_of_number_of_tries,
+                                   most_common_number_of_tries, tries_last_game, max_tries)
 
         print()
 
-    def _display_daily_statistics(self, times_played, difficulty, win_rate):
+    def display_daily_statistics(self, times_played, difficulty, win_rate):
         print(f'{consts.FBWHITE}Statistics{consts.CEND}')
 
         print(f'\tYou played Daily Word {consts.FBMAGENTA}{times_played}{consts.CEND} \
@@ -168,8 +169,8 @@ class Interface:
         print(
             f'\tYou have won {consts.FBCYAN}{win_rate:.2%}{consts.CEND} of times!')
 
-    def _display_distribution(self, occurrences_of_number_of_tries, most_common_number_of_tries,
-                            tries_last_game, max_tries):
+    def display_distribution(self, occurrences_of_number_of_tries, most_common_number_of_tries,
+                              tries_last_game, max_tries):
         terminal_width = os.get_terminal_size().columns
         total_width = terminal_width / 3
 

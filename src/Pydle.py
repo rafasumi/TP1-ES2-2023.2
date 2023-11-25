@@ -55,7 +55,7 @@ class Pydle:
         with open(file_name, encoding='utf-8') as words_file:
             return random.choice(words_file.readlines()).strip()
 
-    def _compute_char_count(self, string):
+    def compute_char_count(self, string):
         char_count = {}
 
         for char in string:
@@ -70,7 +70,7 @@ class Pydle:
         return {letter: consts.FBWHITE for letter in consts.LETTERS}
 
     def compute_guess_colors_and_update_keyboard_colors(self, guessed_word, secret_word, color_dict, guess_display):
-        char_count = self._compute_char_count(secret_word)
+        char_count = self.compute_char_count(secret_word)
         uncolored_indexes = []
 
         for (index, char) in enumerate(guessed_word):
