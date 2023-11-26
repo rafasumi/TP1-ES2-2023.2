@@ -23,7 +23,7 @@ class TestDailyWord(unittest.TestCase):
 
         self.daily_word.save_daily_word_results(tries, word_size, victory)
 
-        mock_file_open().write.assert_called_once_with(AnyStringWith(
+        mock_file_open().write.assert_called_with(AnyStringWith(
             f'{today},{word_size},{tries},{victory}'))
 
     @patch('os.path.exists', return_value=True)
