@@ -15,9 +15,6 @@ class Pydle:
         self.input_handler = InputHandler()
 
     def start_game_loop(self):
-        soundtrack = Soundtrack()
-        soundtrack.start()
-
         self.interface.display_title_and_rules()
         print(consts.FBWHITE + '\nWhat do you want to do now?' + consts.CEND)
 
