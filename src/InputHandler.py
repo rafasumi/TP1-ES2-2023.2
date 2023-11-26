@@ -1,10 +1,14 @@
 import src.constants as consts
 
-import enchant
+from spellchecker import SpellChecker
 
 class InputHandler:
     def __init__(self):
-        self.english_dictionary = enchant.Dict('en_US')
+        self.spell_checker = SpellChecker()
+        self.spell_checker.word_frequency.load_text_file(consts.EASY_WORDS_FILE)
+        self.spell_checker.word_frequency.load_text_file(consts.INTERMEDIATE_WORDS_FILE)
+        self.spell_checker.word_frequency.load_text_file(consts.HARD_WORDS_FILE)
+        self.spell_checker.word_frequency.load_text_file(consts.FOOD_WORDS_FILE)
 
     def is_valid_numeric_option(self, option, start, end):
         if not option.isnumeric():
@@ -100,7 +104,7 @@ class InputHandler:
         elif not word.isalpha():
             print('Your guess must contain only alphabet letters!')
             return False
-        elif not self.english_dictionary.check(word):
+        elif not word in self.spell_checker:
             print('Your guess must be a valid english word!')
             return False
 
