@@ -8,6 +8,7 @@ import sys
 class TestMain(unittest.TestCase):
     def setUp(self):
         self.command = [sys.executable, 'main.py']
+        self.EXIT_SUCCESS = 0
 
     def test_quit_gracefully_with_interrupt(self):
         process = subprocess.Popen(
@@ -18,7 +19,7 @@ class TestMain(unittest.TestCase):
 
         exit_code = process.wait()
 
-        self.assertEqual(exit_code, os.EX_OK)
+        self.assertEqual(exit_code, self.EXIT_SUCCESS)
 
     def test_quit_gracefully_with_eof(self):
         process = subprocess.Popen(
@@ -29,4 +30,4 @@ class TestMain(unittest.TestCase):
 
         exit_code = process.wait()
 
-        self.assertEqual(exit_code, os.EX_OK)
+        self.assertEqual(exit_code, self.EXIT_SUCCESS)
