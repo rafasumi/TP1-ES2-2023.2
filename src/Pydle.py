@@ -2,7 +2,6 @@
 from src.DailyWord import DailyWord
 from src.InputHandler import InputHandler
 from src.Interface import Interface
-from src.Soundtrack import Soundtrack
 import src.constants as consts
 
 import random
