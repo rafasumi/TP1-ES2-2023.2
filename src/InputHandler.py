@@ -1,5 +1,7 @@
 import src.constants as consts
 
+import readline
+
 from spellchecker import SpellChecker
 
 class InputHandler:
