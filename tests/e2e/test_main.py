@@ -14,7 +14,7 @@ class TestMain(unittest.TestCase):
         self.EXIT_SUCCESS = 0
 
     def test_quit_gracefully_with_interrupt(self):
-        if platform == 'Windows':
+        if platform.system() == 'Windows':
             flags = subprocess.CREATE_NEW_PROCESS_GROUP
         else:
             flags = 0
@@ -25,7 +25,7 @@ class TestMain(unittest.TestCase):
         stdout_expect = pexpect.fdpexpect.fdspawn(process.stdout.fileno())
         stdout_expect.expect('Select: ')
 
-        if platform == 'Windows':
+        if platform.system() == 'Windows':
             os.kill(0, signal.CTRL_BREAK_EVENT)
         else:
             process.send_signal(signal.SIGINT)
