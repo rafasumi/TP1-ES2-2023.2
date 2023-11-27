@@ -1,6 +1,9 @@
 import src.constants as consts
 
-import readline
+import platform
+
+if platform.system() != 'Windows':
+    import readline
 
 from spellchecker import SpellChecker
 
