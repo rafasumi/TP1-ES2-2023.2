@@ -1,8 +1,8 @@
 import unittest
-import os
 import signal
 import subprocess
 import sys
+import time
 
 
 class TestMain(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestMain(unittest.TestCase):
         process = subprocess.Popen(
             self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-        process.communicate()
+        time.sleep(2)
         process.send_signal(signal.SIGINT)
 
         exit_code = process.wait()
@@ -25,7 +25,6 @@ class TestMain(unittest.TestCase):
         process = subprocess.Popen(
             self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-        process.communicate()
         process.stdin.close()
 
         exit_code = process.wait()
