@@ -1,8 +1,8 @@
 import unittest
+import pexpect.fdpexpect
 import signal
 import subprocess
 import sys
-import time
 
 
 class TestMain(unittest.TestCase):
@@ -14,7 +14,9 @@ class TestMain(unittest.TestCase):
         process = subprocess.Popen(
             self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-        time.sleep(2)
+        stdout_expect = pexpect.fdpexpect.fdspawn(process.stdout.fileno())
+
+        stdout_expect.expect('Select: ')
         process.send_signal(signal.SIGINT)
 
         exit_code = process.wait()
