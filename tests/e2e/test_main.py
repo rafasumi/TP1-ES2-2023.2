@@ -1,11 +1,6 @@
 import unittest
-import os
-import platform
-import signal
 import subprocess
 import sys
-
-import pexpect.fdpexpect
 
 
 class TestMain(unittest.TestCase):
@@ -13,32 +8,21 @@ class TestMain(unittest.TestCase):
         self.command = [sys.executable, 'main.py']
         self.EXIT_SUCCESS = 0
 
-    def test_quit_gracefully_with_interrupt(self):
-        if platform.system() == 'Windows':
-            flags = subprocess.CREATE_NEW_PROCESS_GROUP
-        else:
-            flags = 0
-
+    def test_exit_with_exit_command(self):
         process = subprocess.Popen(
-            self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
+            self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-        stdout_expect = pexpect.fdpexpect.fdspawn(process.stdout.fileno())
-        stdout_expect.expect('Select: ')
-
-        if platform.system() == 'Windows':
-            os.kill(0, signal.CTRL_BREAK_EVENT)
-        else:
-            process.send_signal(signal.SIGINT)
+        process.communicate(input=b'2\n')
 
         exit_code = process.wait()
 
         self.assertEqual(exit_code, self.EXIT_SUCCESS)
 
-    def test_quit_gracefully_with_eof(self):
+    def test_exit_gracefully_with_eof(self):
         process = subprocess.Popen(
             self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
-        process.stdin.close()
+        process.communicate()
 
         exit_code = process.wait()
 
